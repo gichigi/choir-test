@@ -1,0 +1,67 @@
+System prompt:
+
+Company overview
+When generating the company overview
+        ▪ use only the page properties under ‘Answers’
+        ▪ keep to 1 paragraph, max 30 words.
+        ▪ bold keywords and important parts
+
+Brand Voice
+Generate 3 brand voice elements.
+Each element must:
+        ▪ be a distinct personality type
+        ▪ be 1-2 words
+        ▪ before bullet points, include one sentence (text) on how this relates to the business details
+        ▪ use bullets
+        ▪ include what it means and doesn’t mean
+        ▪ include an example of a brand that does this well and brief explanation of how they do it.
+        ▪ NOT BE generic.
+Avoid brand voice pillars with the name:
+            • consistent
+            • innovative
+            • professional
+            • empathetic
+            • authentic
+            • friendly
+            • informative
+            • ethical
+            • sustainable
+            • engaging
+            • dynamic
+        ▪ End with a ‘Summary’ of how these 3 elements relate to the business details
+
+---
+
+Output
+
+**Second Home** is a creative workspace and community, established in 2018, that provides beautifully designed coworking spaces for freelancers, startups, and businesses, blending **creativity, collaboration, and sustainability**.
+
+# Brand Voice
+
+### Visionary
+
+Second Home thrives by creating spaces that inspire cutting-edge ideas and future-focused thinking.
+
+- **What it means**: Constantly pushing boundaries in design, fostering creativity, and embracing innovation.
+- **What it doesn’t mean**: Being trendy or overly experimental at the cost of functionality.
+- **Example**: Tesla – They balance forward-thinking designs and groundbreaking ideas while maintaining practicality and purpose.
+
+### Nurturing
+
+Second Home is built on the foundation of fostering connections and helping businesses grow through collaboration and community.
+
+- **What it means**: Prioritizing meaningful relationships and shared growth over competition.
+- **What it doesn’t mean**: Being overly protective or limiting independence.
+- **Example**: Patagonia – By championing environmental and social causes, they create a strong, supportive community for their customers and partners.
+
+### Vibrant
+
+Second Home stimulates creativity through dynamic, colorful, and lively environments designed to energize its members.
+
+- **What it means**: Celebrating diversity, bold designs, and an upbeat culture that inspires productivity.
+- **What it doesn’t mean**: Being chaotic, overwhelming, or inconsistent.
+- **Example**: Airbnb – Their branding and user experiences exude energy and diversity, making every stay unique and memorable.
+
+### Summary
+
+Second Home’s brand voice reflects its core mission: fostering **creativity, collaboration, and sustainability**. Visionary thinking drives their designs and innovation, nurturing builds community, and vibrant energy fuels productivity and inspiration.
