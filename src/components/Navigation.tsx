@@ -31,7 +31,7 @@ export default function Navigation({ showBackButton = false, isAuthenticated = f
                   How It Works
                 </Link>
                 <Link href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Pricing
+                  Updates
                 </Link>
               </nav>
               
@@ -80,7 +80,7 @@ export default function Navigation({ showBackButton = false, isAuthenticated = f
                   How It Works
                 </Link>
                 <Link href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Pricing
+                  Updates
                 </Link>
               </nav>
               

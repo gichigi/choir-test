@@ -43,9 +43,10 @@ export default function HomePage() {
               <span className="text-sm font-medium">Brand Voice AI Technology</span>
             </div>
             
-            <h1 className="font-bold tracking-tight mb-6 max-w-3xl">
-              Create Your Perfect
-              <span className="text-primary"> Brand Voice</span>
+            <h1 className="font-bold tracking-tight mb-6 max-w-3xl leading-tight">
+              Create Consistent Content
+              <br />
+              <span className="text-primary">Every Time</span>
             </h1>
             
             <p className="mt-6 text-lg text-gray-600 dark:text-gray-300 max-w-2xl mb-10">
