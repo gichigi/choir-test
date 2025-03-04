@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Jobl.io",
-  description: "AI Resume Tracking and Interview Prep",
+  title: "Choir | AI Content Generation in Your Brand Voice",
+  description: "Generate high-quality content in your unique brand voice with AI",
 };
 
 export default function RootLayout({

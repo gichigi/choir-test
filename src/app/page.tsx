@@ -19,6 +19,9 @@ import {
   CheckCircle
 } from 'lucide-react'
 
+// Note: Metadata must be in a separate server component file since this is a client component
+// We're defining this in layout.tsx instead
+
 export default function HomePage() {
   const { user, loading } = useAuth();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
