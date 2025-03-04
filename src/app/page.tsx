@@ -59,16 +59,18 @@ export default function HomePage() {
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Button variant="outline" size="lg">
-                How It Works
-              </Button>
+              <Link href="#how-it-works">
+                <Button variant="outline" size="lg">
+                  How It Works
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-muted">
+      <section id="features" className="py-16 bg-muted">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="font-bold mb-4">Features That Make Your Brand Stand Out</h2>
@@ -125,7 +127,7 @@ export default function HomePage() {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20">
+      <section id="how-it-works" className="py-20">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="font-bold mb-4">How Choir Works</h2>
@@ -232,7 +234,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary text-primary-foreground">
+      <section id="pricing" className="py-20 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="flex flex-col items-center text-center">
             <h2 className="font-bold mb-6 text-3xl sm:text-4xl md:text-5xl">
