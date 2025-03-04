@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import Navigation from '@/components/Navigation';
-import { ArrowUpDown, Calendar, Copy, Loader2, Search, SortAlphaAsc, SortAlphaDesc, Type, X } from 'lucide-react';
+import { ArrowUpDown, Calendar, Copy, Loader2, Search, ArrowUpCircle, ArrowDownCircle, Type, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { format } from 'date-fns';
 import ReactMarkdown from 'react-markdown';
@@ -221,8 +221,8 @@ export default function ContentHistoryPage() {
                 Title
                 {sortBy === 'title' && (
                   sortDirection === 'asc' 
-                    ? <SortAlphaAsc className="h-4 w-4 ml-2" /> 
-                    : <SortAlphaDesc className="h-4 w-4 ml-2" />
+                    ? <ArrowUpCircle className="h-4 w-4 ml-2" /> 
+                    : <ArrowDownCircle className="h-4 w-4 ml-2" />
                 )}
               </Button>
             </div>
