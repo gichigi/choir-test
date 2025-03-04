@@ -38,3 +38,6 @@ next-env.d.ts
 
 # notion
 notion_system_prompts.txt
+
+# backup
+/backup
