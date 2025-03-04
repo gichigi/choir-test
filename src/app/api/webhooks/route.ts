@@ -18,11 +18,9 @@ if (!getApps().length) {
 
 const adminDb = getFirestore();
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// Updated config format for Next.js App Router
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 async function buffer(readable: Readable) {
   const chunks = [];

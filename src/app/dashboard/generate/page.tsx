@@ -15,15 +15,8 @@ import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 
 export default function ContentGeneratorPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { user } = useAuth();
-  
-  // Get content type from URL parameter if available
-  const typeParam = searchParams.get('type');
-  
   const [contentPrompt, setContentPrompt] = useState("");
-  const [contentType, setContentType] = useState(typeParam || "blog-post");
+  const [contentType, setContentType] = useState("");
   const [customContentType, setCustomContentType] = useState("");
   const [wordCount, setWordCount] = useState("500");
   const [generating, setGenerating] = useState(false);
@@ -31,20 +24,25 @@ export default function ContentGeneratorPage() {
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const { user } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  // Effect to redirect if user is not authenticated
   useEffect(() => {
+    // If user is not authenticated, redirect to login
     if (!user) {
       router.push('/login');
     }
-  }, [user, router]);
 
-  // Update content type when URL parameter changes
-  useEffect(() => {
+    // Get content type from URL parameter if available
+    const typeParam = searchParams.get('type');
     if (typeParam) {
       setContentType(typeParam);
+    } else if (!contentType) {
+      // Default to blog-post if no type specified and contentType is empty
+      setContentType('blog-post');
     }
-  }, [typeParam]);
+  }, [user, router, searchParams]);
 
   const handleGenerateContent = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -65,8 +63,6 @@ export default function ContentGeneratorPage() {
       return;
     }
     
-    const finalContentType = contentType === "custom" ? customContentType : contentType;
-    
     setGenerating(true);
     setError(null);
     
@@ -79,7 +75,7 @@ export default function ContentGeneratorPage() {
         },
         body: JSON.stringify({
           contentPrompt,
-          contentType: finalContentType,
+          contentType: contentType === "custom" ? customContentType : contentType,
           wordCount: parseInt(wordCount),
           userId: user.uid
         }),
@@ -103,14 +99,6 @@ export default function ContentGeneratorPage() {
   const handleSaveContent = async () => {
     if (!user || !generatedContent) return;
     
-    // Validate custom content type if selected
-    if (contentType === "custom" && !customContentType.trim()) {
-      alert("Please enter a custom content type");
-      return;
-    }
-    
-    const finalContentType = contentType === "custom" ? customContentType : contentType;
-    
     setSaving(true);
     setSaveSuccess(false);
     
@@ -130,7 +118,7 @@ export default function ContentGeneratorPage() {
         body: JSON.stringify({
           title: contentPrompt.substring(0, 50) + (contentPrompt.length > 50 ? '...' : ''),
           content: generatedContent,
-          contentType: finalContentType,
+          contentType: contentType === "custom" ? customContentType : contentType,
           wordCount: parseInt(wordCount)
         })
       });
