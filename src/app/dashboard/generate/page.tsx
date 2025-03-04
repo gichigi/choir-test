@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { auth } from '@/firebase/config';
@@ -14,7 +14,8 @@ import { Flame, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 
-export default function ContentGeneratorPage() {
+// Separate client component that safely uses useSearchParams
+function ContentGeneratorWithParams() {
   const [contentPrompt, setContentPrompt] = useState("");
   const [contentType, setContentType] = useState("");
   const [customContentType, setCustomContentType] = useState("");
@@ -42,7 +43,7 @@ export default function ContentGeneratorPage() {
       // Default to blog-post if no type specified and contentType is empty
       setContentType('blog-post');
     }
-  }, [user, router, searchParams]);
+  }, [user, router, searchParams, contentType]);
 
   const handleGenerateContent = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -249,7 +250,12 @@ export default function ContentGeneratorPage() {
                           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                           Generating...
                         </>
-                      ) : "Generate Content"}
+                      ) : (
+                        <>
+                          <Flame className="h-4 w-4 mr-2" />
+                          Generate Content
+                        </>
+                      )}
                     </Button>
                   </CardFooter>
                 </form>
@@ -258,99 +264,129 @@ export default function ContentGeneratorPage() {
             
             {/* Generated Content Section */}
             <div className="md:col-span-2">
-              <Card className="h-full">
+              <Card className="h-full flex flex-col">
                 <CardHeader>
                   <CardTitle className="text-xl font-bold">Generated Content</CardTitle>
                   <CardDescription>
-                    {generatedContent ? 'Your generated content appears here' : 'Content will appear here after generation'}
+                    Your AI-generated content will appear here
                   </CardDescription>
                 </CardHeader>
                 
-                <CardContent className="overflow-auto max-h-[600px]">
+                <CardContent className="flex-grow overflow-auto">
                   {error && (
-                    <div className="bg-red-50 p-4 rounded mb-4 text-red-600">
-                      {error}
+                    <div className="bg-red-50 text-red-700 p-4 rounded-md mb-4">
+                      <p className="font-medium">Error</p>
+                      <p>{error}</p>
                     </div>
                   )}
                   
                   {generating ? (
-                    <div className="flex flex-col items-center justify-center py-12">
-                      <Flame className="h-12 w-12 text-[#FF6F61] animate-pulse mb-4" />
-                      <p className="text-lg font-medium mb-2">Generating content...</p>
-                      <p className="text-sm text-gray-500">This might take a minute or two.</p>
+                    <div className="flex flex-col items-center justify-center h-full py-12">
+                      <Loader2 className="h-12 w-12 animate-spin text-[#FF6F61] mb-4" />
+                      <p className="text-lg font-medium">Generating your content...</p>
+                      <p className="text-sm text-gray-500 mt-2">This may take a minute</p>
                     </div>
                   ) : generatedContent ? (
-                    <div className="prose max-w-none">
+                    <div className="prose prose-sm md:prose max-w-none">
                       <ReactMarkdown>{generatedContent}</ReactMarkdown>
                     </div>
                   ) : (
-                    <div className="flex flex-col items-center justify-center py-12 text-center">
-                      <Flame className="h-12 w-12 text-gray-300 mb-4" />
-                      <p className="text-lg font-medium mb-2">No content generated yet</p>
-                      <p className="text-sm text-gray-500 max-w-md mx-auto">
-                        Fill out the form and click "Generate Content" to create content based on your prompt.
+                    <div className="flex flex-col items-center justify-center h-full py-12 text-gray-500">
+                      <p className="text-lg mb-2">Enter a prompt and click generate</p>
+                      <p className="text-sm text-center max-w-md">
+                        Your content will be generated based on your prompt and branded with your unique voice.
                       </p>
                     </div>
                   )}
                 </CardContent>
                 
-                {generatedContent && (
-                  <CardFooter className="flex justify-between">
-                    <Button
-                      className="bg-[#FF6F61] text-white hover:bg-[#FFB3B0]"
-                      onClick={handleSaveContent}
-                      disabled={saving || !generatedContent}
-                    >
-                      {saving ? (
-                        <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Saving...
-                        </>
-                      ) : saveSuccess ? (
-                        "Saved!"
-                      ) : (
-                        "Save Content"
-                      )}
-                    </Button>
-                    
-                    <Button
-                      variant="outline"
-                      className="border-[#FFB3B0] text-[#FF6F61] hover:bg-[#FFE5E5]"
-                      onClick={() => {
-                        navigator.clipboard.writeText(generatedContent);
-                        alert("Content copied to clipboard!");
-                      }}
-                    >
-                      Copy to Clipboard
-                    </Button>
-                  </CardFooter>
-                )}
+                <CardFooter className="border-t pt-4 flex justify-between">
+                  {generatedContent && (
+                    <>
+                      <Button 
+                        variant="outline" 
+                        className="border-[#FFB3B0] text-[#FF6F61] hover:bg-[#FFE5E5]"
+                        onClick={() => {
+                          // Copy to clipboard
+                          navigator.clipboard.writeText(generatedContent);
+                          alert('Content copied to clipboard!');
+                        }}
+                      >
+                        Copy to Clipboard
+                      </Button>
+                      
+                      <Button 
+                        className="bg-[#FF6F61] text-white hover:bg-[#FFB3B0]"
+                        onClick={handleSaveContent}
+                        disabled={saving}
+                      >
+                        {saving ? (
+                          <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            Saving...
+                          </>
+                        ) : saveSuccess ? (
+                          "Saved Successfully!"
+                        ) : (
+                          "Save Content"
+                        )}
+                      </Button>
+                    </>
+                  )}
+                </CardFooter>
               </Card>
             </div>
           </div>
+          
+          <div className="mt-8 mx-auto max-w-3xl">
+            <h2 className="text-xl font-bold mb-4">Need Help?</h2>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-medium">Writing effective prompts</h3>
+                    <p className="text-gray-600">
+                      Be specific about the topic, audience, and purpose of your content. 
+                      Include key points you want to cover and the desired outcome.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-medium">Content types</h3>
+                    <p className="text-gray-600">
+                      Choose the most appropriate content type for your needs, or create a custom type
+                      for specialized content like product descriptions or press releases.
+                    </p>
+                  </div>
+                  
+                  <div className="text-center mt-6">
+                    <Link 
+                      href="/dashboard/content-history" 
+                      className="text-[#FF6F61] hover:text-[#FFB3B0] underline"
+                    >
+                      View your content history
+                    </Link>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-[#FFE5E5] w-full mt-12">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between py-8 space-y-4 sm:space-y-0">
-          <div className="flex items-center space-x-4">
-            <Flame className="h-6 w-6 text-[#FF6F61]" />
-            <span className="text-sm font-medium">© 2024 Choir. All rights reserved.</span>
-          </div>
-          <nav className="flex items-center space-x-4">
-            <Link href="#" className="text-sm font-medium hover:text-[#FF6F61] transition-colors">
-              Terms
-            </Link>
-            <Link href="#" className="text-sm font-medium hover:text-[#FF6F61] transition-colors">
-              Privacy
-            </Link>
-            <Link href="#" className="text-sm font-medium hover:text-[#FF6F61] transition-colors">
-              Contact
-            </Link>
-          </nav>
-        </div>
-      </footer>
     </div>
+  );
+}
+
+// Main page component that wraps the content generator with a Suspense boundary
+export default function ContentGeneratorPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2">Loading content generator...</span>
+      </div>
+    }>
+      <ContentGeneratorWithParams />
+    </Suspense>
   );
 }
