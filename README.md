@@ -4,6 +4,8 @@ Choir is an AI application that creates a unique brand voice for your business i
 
 ![Choir Brand Voice Generator](https://github.com/gichigi/choir-test/raw/main/public/choir-screenshot.png)
 
+
+
 ## Table of Contents
 - [Overview](#overview)
 - [Features](#features)
