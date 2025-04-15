@@ -200,14 +200,14 @@ export default function ContentGeneratorClientPage() {
   }
 
   // Function to convert HTML to Markdown
-  function htmlToMarkdown(html) {
+  function htmlToMarkdown(html: string): string {
     // This is a placeholder - in a real app, you'd use a library like turndown
     // For now, we'll just return the HTML as is
     return html
   }
 
   // Function to convert Markdown to HTML
-  function markdownToHtml(markdown) {
+  function markdownToHtml(markdown: string): string {
     // This is a placeholder - in a real app, you'd use a library like marked
     // For now, we'll just return the markdown as is
     return markdown
