@@ -249,7 +249,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="flex gap-1">
-                    {[...Array(5)].map((_, i) => (
+                    {[...Array(5)].map((_: unknown, i) => (
                       <Star key={i} className="h-5 w-5 fill-primary text-primary" />
                     ))}
                   </div>
