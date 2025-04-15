@@ -16,12 +16,62 @@ import { Progress } from "@/components/ui/progress"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 import { generateAvatarColor, getInitials } from "@/lib/avatar-utils"
-import {
-  getUserPreferences,
-  saveUserPreferences,
-  resetUserPreferences,
-  type UserPreferences,
-} from "@/lib/user-preferences"
+
+// Define UserPreferences type
+interface UserPreferences {
+  autoGeneratePrompt: boolean
+  brandVoiceEnabled: boolean
+  defaultContentType: string
+  defaultContentLength: string
+  includeImageSuggestions: boolean
+  includeQuotes: boolean
+  readingAge: number
+  wordCount: number
+}
+
+// Function to get user preferences from localStorage
+const getUserPreferences = (): UserPreferences => {
+  try {
+    const storedPreferences = localStorage.getItem("userPreferences")
+    return storedPreferences ? JSON.parse(storedPreferences) : getDefaultPreferences()
+  } catch (error) {
+    console.error("Error getting user preferences from localStorage:", error)
+    return getDefaultPreferences()
+  }
+}
+
+// Function to save user preferences to localStorage
+const saveUserPreferences = (preferences: UserPreferences) => {
+  try {
+    localStorage.setItem("userPreferences", JSON.stringify(preferences))
+  } catch (error) {
+    console.error("Error saving user preferences to localStorage:", error)
+  }
+}
+
+// Function to reset user preferences to default values in localStorage
+const resetUserPreferences = (): UserPreferences => {
+  const defaultPreferences = getDefaultPreferences()
+  try {
+    localStorage.setItem("userPreferences", JSON.stringify(defaultPreferences))
+    return defaultPreferences
+  } catch (error) {
+    console.error("Error resetting user preferences in localStorage:", error)
+    return defaultPreferences
+  }
+}
+
+// Function to get default user preferences
+const getDefaultPreferences = (): UserPreferences => ({
+  autoGeneratePrompt: true,
+  brandVoiceEnabled: true,
+  defaultContentType: "blog-post",
+  defaultContentLength: "medium",
+  includeImageSuggestions: true,
+  includeQuotes: true,
+  readingAge: 12,
+  wordCount: 500,
+})
 
 // Mock user data
 const userData = {
@@ -39,19 +89,9 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
 
-  // Content settings state
-  // const [autoGeneratePrompt, setAutoGeneratePrompt] = useState(true)
-  // const [brandVoiceEnabled, setBrandVoiceEnabled] = useState(true)
-  // const [defaultContentType, setDefaultContentType] = useState("blog-post")
-  // const [defaultContentLength, setDefaultContentLength] = useState("medium")
-  // const [includeImageSuggestions, setIncludeImageSuggestions] = useState(true)
-  // const [includeQuotes, setIncludeQuotes] = useState(true)
-  // const [readingAge, setReadingAge] = useState([12])
-  // const [wordCount, setWordCount] = useState([500])
-
   useEffect(() => {
     const loadPreferences = async () => {
-      const prefs = await getUserPreferences()
+      const prefs = getUserPreferences()
       setPreferences(prefs)
     }
     loadPreferences()
@@ -66,7 +106,7 @@ export default function ProfilePage() {
 
     setIsSaving(true)
     try {
-      await saveUserPreferences(preferences)
+      saveUserPreferences(preferences)
       // Show success toast or message
     } catch (error) {
       // Show error toast or message
@@ -79,7 +119,7 @@ export default function ProfilePage() {
   const handleReset = async () => {
     setIsLoading(true)
     try {
-      const defaultPrefs = await resetUserPreferences()
+      const defaultPrefs = resetUserPreferences()
       setPreferences(defaultPrefs)
       // Show success toast or message
     } catch (error) {
@@ -114,7 +154,9 @@ export default function ProfilePage() {
           <CardContent className="grid gap-6 md:grid-cols-2">
             <div className="flex flex-col items-center gap-4 md:flex-row">
               <Avatar className="h-24 w-24">
-                {userData.profileImage ? <AvatarImage src={userData.profileImage} alt={userData.name} /> : null}
+                {userData.profileImage ? (
+                  <AvatarImage src={userData.profileImage || "/placeholder.svg"} alt={userData.name} />
+                ) : null}
                 <AvatarFallback
                   style={{
                     backgroundColor: avatarColor.background,

@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 export const useMutation = (mutationFunction: any) => {
   return async (...args: any[]) => {
     console.log("Mutation called with args:", args)
-    return "mock_convex_id_123456"
+    return "mock_id_123456"
   }
 }
 
@@ -20,16 +20,8 @@ export const useQuery = (queryFunction: any) => {
 }
 
 export const useConvexAuth = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 1000)
-
-    return () => clearTimeout(timer)
-  }, [])
-
-  return { isAuthenticated, isLoading, setIsAuthenticated }
+  return { isAuthenticated, isLoading }
 }

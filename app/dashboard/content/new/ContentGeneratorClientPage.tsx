@@ -52,12 +52,13 @@ export default function ContentGeneratorClientPage() {
     textarea.style.height = `${textarea.scrollHeight + 2}px`
   }
 
-  // Update any callback functions with implicit any types
+  // Handle content outline change with auto-resize
   const handleContentOutlineChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContentOutline(e.target.value)
     autoResizeTextarea(e.target)
   }
 
+  // Handle custom context change with auto-resize
   const handleCustomContextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCustomContext(e.target.value)
     autoResizeTextarea(e.target)
@@ -164,8 +165,8 @@ export default function ContentGeneratorClientPage() {
     }
   }, [contentId])
 
-  // Update the cleanHtmlContent function to properly type parameters
-  function cleanHtmlContent(htmlContent: string) {
+  // Function to clean HTML content
+  function cleanHtmlContent(htmlContent) {
     // Extract just the body content if it's a full HTML document
     if (htmlContent.includes("<!DOCTYPE html>") || htmlContent.includes("<html")) {
       const bodyMatch = htmlContent.match(/<body[^>]*>([\s\S]*?)<\/body>/i)
@@ -186,8 +187,8 @@ export default function ContentGeneratorClientPage() {
     return htmlContent
   }
 
-  // Update the countWordsInHtml function to properly type parameters
-  function countWordsInHtml(html: string) {
+  // Function to count words in HTML content
+  function countWordsInHtml(html) {
     // Create a temporary element
     const tempElement = document.createElement("div")
     tempElement.innerHTML = html
@@ -200,14 +201,14 @@ export default function ContentGeneratorClientPage() {
   }
 
   // Function to convert HTML to Markdown
-  function htmlToMarkdown(html: string): string {
+  function htmlToMarkdown(html) {
     // This is a placeholder - in a real app, you'd use a library like turndown
     // For now, we'll just return the HTML as is
     return html
   }
 
   // Function to convert Markdown to HTML
-  function markdownToHtml(markdown: string): string {
+  function markdownToHtml(markdown) {
     // This is a placeholder - in a real app, you'd use a library like marked
     // For now, we'll just return the markdown as is
     return markdown
@@ -490,7 +491,7 @@ Important formatting instructions:
   }
 
   // Insert markdown formatting at cursor position or around selected text
-  const insertMarkdown = (prefix: string, suffix = "") => {
+  const insertMarkdown = (prefix, suffix = "") => {
     const textarea = document.getElementById("markdown-editor") as HTMLTextAreaElement
     if (!textarea) return
 

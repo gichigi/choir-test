@@ -7,10 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { ArrowLeft, ArrowRight, Edit, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
-import { generateBrandVoice } from "@/app/actions/generate-brand-voice"
 import { useToast } from "@/components/ui/use-toast"
 import { LoadingSpinner } from "@/components/loading-spinner"
-import { isOnboardingCompleted } from "@/lib/data-service"
 
 type BrandVoiceData = {
   businessName: string
@@ -39,7 +37,9 @@ export default function Review() {
 
   useEffect(() => {
     // Check if onboarding is already completed
-    if (isOnboardingCompleted()) {
+    const onboardingCompleted = localStorage.getItem("onboardingCompleted") === "true"
+
+    if (onboardingCompleted) {
       // If they've already completed onboarding but somehow got here,
       // we'll still let them continue but we'll check if they have form data
       const savedData = localStorage.getItem("brandVoiceData")
@@ -95,18 +95,30 @@ export default function Review() {
     setGenerationError(null)
 
     try {
-      const result = await generateBrandVoice(formData)
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000))
 
-      if (result.success && result.data) {
+      const mockResult = {
+        success: true,
+        data: {
+          tone: "Professional",
+          style: "Concise",
+          voice: "Authoritative",
+          exampleContent: "This is an example of generated content.",
+        },
+      }
+
+      if (mockResult.success && mockResult.data) {
         // Store the generated brand voice data
         localStorage.setItem("brandVoiceGenerated", "true")
-        localStorage.setItem("generatedBrandVoice", JSON.stringify(result.data))
+        localStorage.setItem("generatedBrandVoice", JSON.stringify(mockResult.data))
+        localStorage.setItem("onboardingCompleted", "true") // Mark onboarding as completed
         router.push("/onboarding/brand-voice")
       } else {
-        setGenerationError(result.error || "Failed to generate brand voice. Please try again.")
+        setGenerationError(mockResult.error || "Failed to generate brand voice. Please try again.")
         toast({
           title: "Generation failed",
-          description: result.error || "Failed to generate brand voice. Please try again.",
+          description: mockResult.error || "Failed to generate brand voice. Please try again.",
           variant: "destructive",
         })
       }

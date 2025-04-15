@@ -93,7 +93,7 @@ export async function analyzeWebsite(url: string): Promise<{ description: string
       } catch (e) {
         return {
           description: "",
-          error: `Could not access the website: ${fetchError instanceof Error ? fetchError.message : "Unknown error"}. The website may be blocking our requests or is not accessible.`,
+          error: `Could not access the website: ${fetchError.message}. The website may be blocking our requests or is not accessible.`,
         }
       }
     }

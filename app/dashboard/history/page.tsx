@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { FileText, Plus, Search, Copy, Pencil, Trash2, Calendar, Clock, Tag, ArrowUpDown, Loader2 } from "lucide-react"
-import { getContents, deleteContent, type ContentItem } from "@/lib/data-service"
 import { toast } from "@/components/ui/use-toast"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
@@ -22,6 +21,17 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
 import { format } from "date-fns"
+
+export interface ContentItem {
+  id: string
+  topic: string
+  content: string
+  htmlContent?: string
+  keywords?: string
+  contentType: string
+  createdAt: string
+  wordCount?: number
+}
 
 export default function ContentLibrary() {
   const router = useRouter()
@@ -62,7 +72,7 @@ export default function ContentLibrary() {
     try {
       // Use a more efficient approach with requestAnimationFrame
       requestAnimationFrame(() => {
-        const items = getContents()
+        const items = getContentsFromLocalStorage()
         setContentItems(items)
 
         // Defer sorting to the next frame to improve perceived performance
@@ -80,6 +90,24 @@ export default function ContentLibrary() {
         variant: "destructive",
       })
       setIsLoading(false)
+    }
+  }
+
+  const getContentsFromLocalStorage = (): ContentItem[] => {
+    try {
+      const storedContent = localStorage.getItem("contentItems")
+      return storedContent ? JSON.parse(storedContent) : []
+    } catch (error) {
+      console.error("Error getting content from localStorage:", error)
+      return []
+    }
+  }
+
+  const setContentsToLocalStorage = (items: ContentItem[]) => {
+    try {
+      localStorage.setItem("contentItems", JSON.stringify(items))
+    } catch (error) {
+      console.error("Error setting content to localStorage:", error)
     }
   }
 
@@ -141,7 +169,7 @@ export default function ContentLibrary() {
 
   const handleDeleteContent = async (id: string) => {
     try {
-      const success = deleteContent(id)
+      const success = deleteContentFromLocalStorage(id)
       if (success) {
         // Remove from state
         const updatedItems = contentItems.filter((item) => item.id !== id)
@@ -172,6 +200,18 @@ export default function ContentLibrary() {
       })
     } finally {
       setItemToDelete(null)
+    }
+  }
+
+  const deleteContentFromLocalStorage = (id: string): boolean => {
+    try {
+      const storedContent = getContentsFromLocalStorage()
+      const updatedContent = storedContent.filter((item) => item.id !== id)
+      setContentsToLocalStorage(updatedContent)
+      return true
+    } catch (error) {
+      console.error("Error deleting content from localStorage:", error)
+      return false
     }
   }
 
