@@ -150,6 +150,7 @@ export function BrandVoiceGuide({
     }
   }
 
+  // Update the highlightKeywords function to properly type the word parameter
   const highlightKeywords = (text: string) => {
     if (!text) return "" // Handle undefined or empty text
 
@@ -173,7 +174,7 @@ export function BrandVoiceGuide({
       return text
     }
 
-    return text.split(" ").map((word, index) => {
+    return text.split(" ").map((word: string, index: number) => {
       const lowerWord = word.toLowerCase().replace(/[^a-z]/g, "")
       if (keywords.includes(lowerWord)) {
         return <strong key={index}>{word} </strong>

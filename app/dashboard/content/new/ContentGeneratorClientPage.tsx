@@ -490,7 +490,7 @@ Important formatting instructions:
   }
 
   // Insert markdown formatting at cursor position or around selected text
-  const insertMarkdown = (prefix, suffix = "") => {
+  const insertMarkdown = (prefix: string, suffix = "") => {
     const textarea = document.getElementById("markdown-editor") as HTMLTextAreaElement
     if (!textarea) return
 
