@@ -85,7 +85,7 @@ Return ONLY the JSON object without any markdown formatting or additional text.`
 export async function regeneratePillar(
   data: any,
   pillarIndex: number,
-  existingPillars: any,
+  existingPillars: any[],
 ): Promise<{ success: boolean; data?: any; error?: string; warning?: string }> {
   try {
     const demographics = Array.isArray(data.selectedDemographics)
@@ -96,8 +96,8 @@ export async function regeneratePillar(
       : data.businessValues || "Not specified"
 
     const otherPillars = existingPillars
-      .filter((_, index) => index !== pillarIndex)
-      .map((pillar) => pillar.title)
+      .filter((_: any, index: number) => index !== pillarIndex)
+      .map((pillar: any) => pillar.title)
       .join(", ")
 
     const prompt = `
