@@ -52,13 +52,12 @@ export default function ContentGeneratorClientPage() {
     textarea.style.height = `${textarea.scrollHeight + 2}px`
   }
 
-  // Handle content outline change with auto-resize
+  // Update any callback functions with implicit any types
   const handleContentOutlineChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContentOutline(e.target.value)
     autoResizeTextarea(e.target)
   }
 
-  // Handle custom context change with auto-resize
   const handleCustomContextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCustomContext(e.target.value)
     autoResizeTextarea(e.target)
@@ -165,8 +164,8 @@ export default function ContentGeneratorClientPage() {
     }
   }, [contentId])
 
-  // Function to clean HTML content
-  function cleanHtmlContent(htmlContent) {
+  // Update the cleanHtmlContent function to properly type parameters
+  function cleanHtmlContent(htmlContent: string) {
     // Extract just the body content if it's a full HTML document
     if (htmlContent.includes("<!DOCTYPE html>") || htmlContent.includes("<html")) {
       const bodyMatch = htmlContent.match(/<body[^>]*>([\s\S]*?)<\/body>/i)
@@ -187,8 +186,8 @@ export default function ContentGeneratorClientPage() {
     return htmlContent
   }
 
-  // Function to count words in HTML content
-  function countWordsInHtml(html) {
+  // Update the countWordsInHtml function to properly type parameters
+  function countWordsInHtml(html: string) {
     // Create a temporary element
     const tempElement = document.createElement("div")
     tempElement.innerHTML = html
