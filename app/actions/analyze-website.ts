@@ -86,6 +86,9 @@ export async function analyzeWebsite(url: string): Promise<{ description: string
       clearTimeout(timeoutId)
       console.error("Fetch error:", fetchError)
 
+      // Fix the TypeScript error by properly checking the error type
+      const errorMessage = fetchError instanceof Error ? fetchError.message : "Unknown error occurred"
+
       // If we can extract a domain name, use it for a fallback analysis
       try {
         const domain = new URL(formattedUrl).hostname
@@ -93,15 +96,16 @@ export async function analyzeWebsite(url: string): Promise<{ description: string
       } catch (e) {
         return {
           description: "",
-          error: `Could not access the website: ${fetchError.message}. The website may be blocking our requests or is not accessible.`,
+          error: `Could not access the website: ${errorMessage}. The website may be blocking our requests or is not accessible.`,
         }
       }
     }
   } catch (error) {
     console.error("Error analyzing website:", error)
+    const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred"
     return {
       description: "",
-      error: error instanceof Error ? error.message : "An unexpected error occurred",
+      error: errorMessage,
     }
   }
 }
@@ -167,6 +171,7 @@ async function generateFallbackDescription(domain: string): Promise<{ descriptio
     }
   } catch (error) {
     console.error("Error generating fallback description:", error)
+    const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred"
     return {
       description: "",
       error: "We couldn't analyze your website. Please enter your description manually.",
