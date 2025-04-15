@@ -63,9 +63,9 @@
     "ws": "latest",
     "@emotion/is-prop-valid": "latest",
     "@tailwindcss/typography": "latest",
+    "convex": "latest",
     "@ai-sdk/openai": "latest",
     "ai": "latest",
-    "convex": "latest",
     "openai": "latest",
     "framer-motion": "latest"
   },
